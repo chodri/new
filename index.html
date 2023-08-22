@@ -1,0 +1,144 @@
+
+<!-- prettier-ignore -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>demo</title>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  <meta name="theme-color" content="#000000" />
+  <style>
+    html {
+      height: 100%;
+      overflow: hidden;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: rgba(255,255,255,0.65);
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    }
+    div.wrap {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #C3E0E2;
+      background-image: linear-gradient(180deg, #C3E0E2 0%, #EFFCFD 74%);
+      transform:translateZ(0)
+    }
+    #dialog {
+      width: 100%;
+      max-width: 300px;
+      padding: 8px;
+      margin: 20px;
+      border-radius: 9px;
+      background-color: rgba(255,255,255,0.4);
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+      color: #000;
+      z-index: 0;
+      backdrop-filter: blur(5px);
+      transition: all 120ms ease-in;
+      transition-timing-function: ease-in;
+      opacity: 0;
+    }
+
+    #dialog.active {
+      opacity: 1;
+    } 
+
+    #revieve-launcher {
+      border-radius: 5px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 120ms ease-in;
+      background-color: #3cadb2;
+      color: #FFF;
+      transition-timing-function: ease-out;
+      width: 100%;
+      border: none;
+      font-size: 16px;
+    }
+
+    #revieve-launcher:hover {
+      background-color: rgb(54,156,160);
+    }
+  </style>
+
+<script type="text/javascript">
+  
+  var revieveConfig = {
+    partner_id: 'UKqZfi28tj',
+    locale: 'en',
+    env: 'test', // for test env. Change to prod for production deployment
+    avoidCookies: false, // this is by default false and can be changed to true to avoid cookies
+    onAddToCart: function(products) {
+      // To be filled in by Belotero
+      if (Array.isArray(products)) {
+        // Array means we got multiple products (add all to cart)
+        console.log("User clicked add all cart. Adding all products to shopping cart.");
+        console.log(products);
+      } else {
+        // Single object means we got one product (add to cart)
+        console.log("User clicked add to cart. Adding the product to shopping cart.");
+        console.log(products);
+      }
+    },
+    onClose: function() {
+      // User closed modal. Here you could forward them to checkout if they had 
+      // added products (onAddToCart was called before).
+      console.log('User clicked close');
+    },
+    onCheckout: function(data) {
+      // User clicked the checkout button that is visible on results page
+      // after adding one or more products to cart. Redirect to checkout page?
+      console.log('User clicked checkout');
+    },
+    onClickProduct: function(product) {
+      // To be filled in by Belotero.
+      console.log("User clicked info action.");
+      console.log(product);
+      var win = window.open(product.url, '_blank');
+      win.focus();
+    },
+    onSendEmail: function onSendEmail(data) {
+        console.log('send email', data);
+    },
+  };
+
+  (function() {
+    var rv = document.createElement('script');
+    rv.src = 'https://d38knilzwtuys1.cloudfront.net/revieve-plugin-v4/revieve-plugin-loader.js';
+    rv.charset = 'utf-8';
+    rv.type = 'text/javascript';
+    rv.async = 'true';
+        rv.onload = rv.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      Revieve.Init(revieveConfig, function() {
+        // Comment out the below line if you want to open the modal
+        // manually when user clicks a certain button or navigates
+        // to certain page.
+        Revieve.API.show();
+      });
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(rv, s);
+  })();
+</script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div id="dialog">
+      <button id="revieve-launcher">Loading advisor</button>
+    </div>
+  </div>
+</body>
+
+</html>
